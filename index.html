@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Purses Boutique</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2a2a2a;
+            --secondary: #d4af37;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* Navigation Styles */
+        nav {
+            background: var(--primary);
+            padding: 1.2rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 1.5rem;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        nav a:hover {
+            color: var(--secondary);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--secondary);
+            bottom: -5px;
+            left: 0;
+            transition: var(--transition);
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Product Grid */
+        .products-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2.5rem;
+            padding: 7rem 2rem 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-bottom: 3px solid var(--secondary);
+        }
+
+        .product-card-content {
+            padding: 1.5rem;
+        }
+
+        .product-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .product-price {
+            font-size: 1.3rem;
+            color: var(--secondary);
+            font-weight: 600;
+            margin: 0.8rem 0;
+        }
+
+        .product-card button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            font-weight: 500;
+        }
+
+        .product-card button:hover {
+            background: var(--secondary);
+            color: var(--primary);
+        }
+
+        /* Product Details Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            padding-top: 4rem;
+            overflow-y: auto;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2.5rem;
+            max-width: 800px;
+            margin: 2rem auto;
+            border-radius: 15px;
+            position: relative;
+            animation: modalOpen 0.3s ease;
+        }
+
+        @keyframes modalOpen {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .close {
+            position: absolute;
+            right: 2rem;
+            top: 1.5rem;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close:hover {
+            color: var(--secondary);
+        }
+
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .image-gallery img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .image-gallery img:hover {
+            transform: scale(1.03);
+        }
+
+        /* Page Headers */
+        .page-header {
+            text-align: center;
+            padding: 5rem 2rem 2rem;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+                        url('header-bg.jpg') center/cover;
+            color: white;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Contact Form */
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 0.8rem;
+            margin: 0.5rem 0 1.5rem;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            border-color: var(--secondary);
+            outline: none;
+        }
+
+        .contact-form button {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .contact-form button:hover {
+            background: var(--secondary);
+            color: var(--primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+                text-align: center;
+            }
+
+            nav a {
+                margin: 0 0.8rem;
+                font-size: 0.9rem;
+            }
+
+            .products-container {
+                grid-template-columns: 1fr;
+                padding: 6rem 1rem 2rem;
+            }
+
+            .modal-content {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+        }
+        :root {
+            --primary: #2a2a2a;
+            --secondary: #d4af37;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .products-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2.5rem;
+            padding: 3rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-bottom: 3px solid var(--secondary);
+        }
+
+        .magnifier {
+            position: absolute;
+            display: none;
+            width: 150px;
+            height: 150px;
+            border: 2px solid var(--secondary);
+            border-radius: 50%;
+            background-repeat: no-repeat;
+            background-size: 200% 200%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation remains same as before -->
+
+    <!-- Update Home Page with new header -->
+    <div id="home" class="page">
+        <div class="page-header">
+            <h1>Luxury Handcrafted Purses</h1>
+            <p>Discover Our Exclusive Collection</p>
+        </div>
+    </div>
+
+    <!-- Products Page - Update product card structure -->
+    <div id="products" class="page">
+        <div class="products-container">
+            <div class="product-card">
+                <img src="./assets/liou jo.jpg" alt="Designer Purse">
+                <div class="product-card-content">
+                    <h3>Elegant Evening Purse</h3>
+                    <p class="product-price">$199.99</p>
+                    <button onclick="showProductDetails('product1')">View Details</button>
+                </div>
+            </div>
+            <!-- Add more product cards -->
+            <div class="product-card">
+                <img src="./assets/barcel.jpg" alt="Designer Purse">
+                <div class="product-card-content">
+                    <h3>Elegant Evening Purse</h3>
+                    <p class="product-price">$199.99</p>
+                    <button onclick="showProductDetails('product1')">View Details</button>
+                </div>
+            </div>
+            <!-- Add more product cards -->
+            <div class="product-card">
+                <img src="./assets/lijouwhite.jpg" alt="Designer Purse">
+                <div class="product-card-content">
+                    <h3>Elegant Evening Purse</h3>
+                    <p class="product-price">$199.99</p>
+                    <button onclick="showProductDetails('product1')">View Details</button>
+                </div>
+            </div>
+            <!-- Add more product cards -->
+            <div class="product-card">
+                <img src="./assets/zara.jpg" alt="Designer Purse">
+                <div class="product-card-content">
+                    <h3>Elegant Evening Purse</h3>
+                    <p class="product-price">$199.99</p>
+                    <button onclick="showProductDetails('product1')">View Details</button>
+                </div>
+            </div>
+            <!-- Add more product cards -->
+            <div class="product-card">
+                <img src="./assets/michael kors.jpg" alt="Designer Purse">
+                <div class="product-card-content">
+                    <h3>Elegant Evening Purse</h3>
+                    <p class="product-price">$199.99</p>
+                    <button onclick="showProductDetails('product1')">View Details</button>
+                </div>
+            </div>
+            <!-- Add more product cards -->
+            <div class="product-card">
+                <img src="./assets/carpisa black.jpg" alt="Designer Purse">
+                <div class="product-card-content">
+                    <h3>Elegant Evening Purse</h3>
+                    <p class="product-price">$199.99</p>
+                    <button onclick="showProductDetails('product1')">View Details</button>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Updated Modal Content Structure -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="productContent">
+                <!-- Content populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+    <div class="magnifier" id="magnifier"></div>
+
+    <!-- Add remaining pages -->
+
+    <script>
+        const products = {
+    product1: {
+        name: "Gucci Purse",
+        price: "199.99",
+        description: "A luxurious handcrafted evening purse perfect for special occasions.",
+        images: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfk-ddxSCC9Cz7H11vYavTBLkplG91ZAVcU60SPDlhTtdGuCEhfGrym9Qu3QbJnyYodKw&usqp=CAU", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3gXGgAi-0BpmPK9K7wtFqrpmmS4q0Ac58fhOTZzT2ZnKGVcysXdCDvzinH41aV99Hwvs&usqp=CAU", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1s9LvSbLFeNBUXPLHkGsbZH_8e5thjq6t0A&s"],
+        features: ["Genuine leather", "Gold-tone chain strap", "Hand-stitched design"]
+    },
+    product2: {
+        name: "Classic Leather Tote",
+        price: "249.99",
+        description: "A spacious and stylish leather tote bag, ideal for everyday use.",
+        images: ["product2.jpg", "product2_2.jpg", "product2_3.jpg"],
+        features: ["Premium leather", "Multiple compartments", "Durable stitching"]
+    }
+};
+
+const modal = document.getElementById("productModal");
+const productContent = document.getElementById("productContent");
+const closeModal = document.querySelector(".close");
+
+function showProductDetails(productId) {
+    const product = products[productId];
+    
+    const content = `
+        <h2>${product.name}</h2>
+        <div class="image-gallery">
+            ${product.images.map(img => `
+                <img src="${img}" alt="${product.name}" onclick="this.classList.toggle('zoom')">
+            `).join('')}
+        </div>
+        <div class="product-details">
+            <p class="product-price">$${product.price}</p>
+            <h4>Description</h4>
+            <p>${product.description}</p>
+            <h4>Features</h4>
+            <ul class="features-list">
+                ${product.features.map(feature => `<li>${feature}</li>`).join('')}
+            </ul>
+        </div>
+    `;
+    
+    productContent.innerHTML = content;
+    modal.style.display = "block";
+}
+
+closeModal.onclick = function() {
+    modal.style.display = "none";
+};
+
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+};
+document.addEventListener("DOMContentLoaded", function () {
+            const magnifier = document.getElementById("magnifier");
+
+            document.querySelectorAll(".product-card img").forEach(img => {
+                img.addEventListener("mousemove", function (event) {
+                    const { left, top, width, height } = this.getBoundingClientRect();
+                    const x = (event.clientX - left) / width * 100;
+                    const y = (event.clientY - top) / height * 100;
+                    
+                    magnifier.style.backgroundImage = `url(${this.src})`;
+                    magnifier.style.backgroundPosition = `${x}% ${y}%`;
+                    magnifier.style.left = `${event.pageX + 10}px`;
+                    magnifier.style.top = `${event.pageY + 10}px`;
+                    magnifier.style.display = "block";
+                });
+                img.addEventListener("mouseleave", function () {
+                    magnifier.style.display = "none";
+                });
+            });
+        });
+    </script>
+</body>
+</html>
